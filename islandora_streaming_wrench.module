@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Handles the secure display of islandora:streaming objects using wrench and wowza.
+ */
+
+function islandora_streaming_wrench_islandora_streaming_sources_alter(&$sources){
+  module_load_include('inc', 'islandora_streaming_wrench', 'includes/utilities');
+  $token = islandora_streaming_wrench_create_token();
+  if(!$token){
+    return;
+  }
+  foreach ($sources as &$source) {
+    if (!empty($source['mime']) && $source['mime'] == 'rtmp/mp4') {
+      $source = islandora_streaming_wrench_tokenize_rtmp($source, $token);
+    } else if(!empty($source['mime'])){
+      $source = islandora_streaming_wrench_tokenize($source, $token);
+    }
+  }
+}

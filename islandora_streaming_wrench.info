@@ -1,0 +1,5 @@
+name = Secure Islandora Streaming Media using Wrench and Wowza
+description = Adds tokens to streams sources so Wrench can be used to secure the streams.
+dependencies[] = islandora_streaming
+package = Islandora Solution Packs
+core = 7.x

@@ -1,0 +1,62 @@
+<?php
+
+/**
+ * @file
+ * islandora_secure_streaming_wrench.install
+ */
+
+
+
+/**
+ * Implements hook_uninstall().
+ */
+/*function islandora_streaming_wrench_uninstall() {
+  module_load_include('inc', 'islandora', 'includes/solution_packs');
+  $variables = array(
+  );
+  array_map('variable_del', $variables);
+  islandora_install_solution_pack('islandora_streaming', 'uninstall');
+// Delete variables if we make any.
+
+}*/
+
+/**
+ * Implements hook_schema().
+ */
+function islandora_streaming_wrench_schema() {
+  $schema['islandora_streaming_tokens'] = array(
+    'description' => 'This table is used to store hash tokens for wowza wrench.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+      ),
+      'username' => array(
+        'description' => 'The user id of the drupal user associated whti this request.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ),
+      'ts' => array(
+        'description' => 'Current timestamp.',
+        'type' => 'datetime',
+        'mysql_type' => 'datetime',
+        'not null' => TRUE,
+      ),
+       'ip' => array(
+        'description' => 'The ip address of the user making the request.',
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+      ),
+      'token' => array(
+        'description' => 'A hashed token.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+  return $schema;
+}
