@@ -35,7 +35,6 @@ function islandora_streaming_wrench_create_token() {
   if(empty($user->name)){
     $user->name = 'anonymous user';
   }
-  debug($user);
   $db_entry = array(
     'ip' => $ip,
     'token' => $token,
