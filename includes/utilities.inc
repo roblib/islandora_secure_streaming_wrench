@@ -31,8 +31,8 @@ function islandora_streaming_wrench_tokenize($source, $token) {
 function islandora_streaming_wrench_create_token() {
   $token = uniqid();
   $ip = ip_address();
-  global $user;  
-  if(empty($user->name)){
+  global $user;
+  if (empty($user->name)) {
     $user->name = 'anonymous user';
   }
   $db_entry = array(
@@ -42,9 +42,22 @@ function islandora_streaming_wrench_create_token() {
     'ts' => date("Y-m-d H:i:s"),
   );
   try {
-    $test = drupal_write_record('islandora_streaming_tokens', $db_entry);
+    $success = drupal_write_record('islandora_streaming_tokens', $db_entry);
   } catch (Exception $e){
     drupal_set_message(t("Error creating secure token for video streaming. @details", array('@details' => $e->getMessage())), 'error');
   }
-  return isset($test) ? $token : NULL;
+  return isset($success) ? $token : NULL;
+}
+
+/**
+ * Remove unused Wrench Tokens.
+ */
+function islandora_streaming_wrench_remove_tokens() {
+  try{
+    $results = db_delete('islandora_streaming_tokens')
+        ->where('ts <= DATE_SUB(CURDATE(), INTERVAL 1 HOUR)')
+        ->execute();
+  } catch (Exception $e){
+    watchdog('islandora_streaming_wrench', 'Error removing unused tokens. %msg', array('%msg' => $e->getMessage()), WATCHDOG_ERROR);
+  }
 }

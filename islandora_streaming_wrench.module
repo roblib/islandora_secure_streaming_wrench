@@ -5,6 +5,11 @@
  * Handles the secure display of islandora:streaming objects using wrench and wowza.
  */
 
+/**
+ * implements islandora_streaming_sources alter.
+ * @param type $sources
+ *   array of sources to alter
+ */
 function islandora_streaming_wrench_islandora_streaming_sources_alter(&$sources){
   module_load_include('inc', 'islandora_streaming_wrench', 'includes/utilities');
   $token = islandora_streaming_wrench_create_token();
@@ -18,4 +23,12 @@ function islandora_streaming_wrench_islandora_streaming_sources_alter(&$sources)
       $source = islandora_streaming_wrench_tokenize($source, $token);
     }
   }
+}
+
+/**
+ * implements hook_cron
+ */
+function islandora_streaming_wrench_cron(){
+  module_load_include('inc', 'islandora_streaming_wrench', 'includes/utilities');
+  islandora_streaming_wrench_remove_tokens();
 }
